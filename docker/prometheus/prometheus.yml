@@ -1,0 +1,15 @@
+global:
+  scrape_interval: 15s # how often to pull metrics
+
+scrape_configs:
+  # Prometheus scrapes its own metrics
+  - job_name: prometheus
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  # The FastAPI serving endpoint — built later in Week 15.
+  # host.docker.internal = "the host machine" as seen from inside a container.
+  - job_name: fraud-serving
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["host.docker.internal:8000"]
