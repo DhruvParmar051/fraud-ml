@@ -1,0 +1,27 @@
+[project]
+name = "fraud-ml"
+version = "0.1.0"
+description = "Real-time transaction fraud detection ML system"
+requires-python = ">=3.11,<3.12"
+
+# Dependencies are managed by conda — see environment.yml
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP", "B", "SIM", "ANN"]
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"   

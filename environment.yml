@@ -1,0 +1,45 @@
+name: fraud-ml
+channels:
+  - conda-forge
+
+dependencies:
+  # ── Managed by conda: interpreter + system-level deps ──
+  - python=3.11
+  - openjdk=17 # JVM required by PySpark — conda installs it INTO the env
+  - llvm-openmp
+  - pip
+
+  # ── Managed by pip: all Python packages ───────────────
+  - pip:
+      # Core ML
+      - pyspark==3.5.0
+      - xgboost>=2.0
+      - scikit-learn>=1.4
+      - shap>=0.44
+      - optuna>=3.5
+      - imbalanced-learn>=0.12
+      # MLOps
+      - mlflow>=2.11
+      - wandb>=0.16
+      - feast[redis]>=0.38
+      - evidently>=0.4
+      - great-expectations>=0.18
+      # Serving
+      - fastapi>=0.110
+      - uvicorn[standard]>=0.29
+      - pydantic>=2.6
+      - prometheus-client>=0.20
+      # Data
+      - pandas>=2.2
+      - numpy>=1.26
+      - pyarrow>=15.0
+      - pyyaml>=6.0
+      # Streaming
+      - confluent-kafka>=2.3
+      # Dev tooling
+      - pytest>=8.0
+      - locust>=2.24
+      - ruff>=0.3
+      - mypy>=1.9
+      - black>=24.3
+      - pre-commit>=3.7
