@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint-type-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -el {0}   # login shell so `conda activate` works
+    steps:
+      - uses: actions/checkout@v4
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          environment-file: environment.yml
+          activate-environment: fraud-ml
+          auto-activate-base: false
+      - name: Ruff (lint)
+        run: ruff check src/ tests/
+      - name: Mypy (type check)
+        run: mypy src/
+      - name: Pytest (unit tests)
+        run: pytest tests/ -q
+
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build serving image
+        run: docker build -f src/serving/Dockerfile -t fraud-serving:ci .
