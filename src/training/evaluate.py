@@ -11,6 +11,8 @@ matplotlib.use("Agg")  # headless backend — render to file, no display needed
 import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np
 import numpy.typing as npt
+import pandas as pd
+import shap
 from sklearn.metrics import (
     average_precision_score,
     confusion_matrix,
@@ -20,6 +22,15 @@ from sklearn.metrics import (
 
 FloatArray = npt.NDArray[np.float64]
 IntArray = npt.NDArray[np.int_]
+
+
+def plot_shap_summary(shap_values: FloatArray, X: pd.DataFrame, out_path: Path) -> None:
+    """Save a SHAP summary (beeswarm) plot."""
+    shap.summary_plot(shap_values, X, show=False)
+    fig = plt.gcf()
+    fig.tight_layout()
+    fig.savefig(out_path)
+    plt.close(fig)
 
 
 def precision_at_recall(precision: FloatArray, recall: FloatArray, target_recall: float) -> float:

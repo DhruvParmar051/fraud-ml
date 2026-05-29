@@ -29,6 +29,7 @@ from src.training.evaluate import (
     passes_promotion_gate,
     plot_confusion_matrix,
     plot_feature_importance,
+    plot_shap_summary,
 )
 from src.training.model import FraudModel
 
@@ -133,6 +134,10 @@ def main() -> int:
             fi_path = Path(tmp) / "feature_importance.png"
             plot_confusion_matrix(y_true, y_pred, cm_path)
             plot_feature_importance(model.feature_importances(), fi_path)
+            shap_path = Path(tmp) / "shap_summary.png"
+            X_shap = X_test.sample(min(2000, len(X_test)), random_state=42)
+            plot_shap_summary(model.shap_values(X_shap), X_shap, shap_path)
+            mlflow.log_artifact(str(shap_path))
             mlflow.log_artifact(str(cm_path))
             mlflow.log_artifact(str(fi_path))
 
