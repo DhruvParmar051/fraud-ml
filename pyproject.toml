@@ -12,7 +12,11 @@ target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "UP", "B", "SIM", "ANN"]
-ignore = ["N812"]  # `from pyspark.sql import functions as F` is the standard idiom
+ignore = [
+    "N812",  # `from pyspark.sql import functions as F` is the standard idiom
+    "N803",  # `X` for a feature matrix is the universal ML / scikit-learn convention
+    "N806",  # ditto for `X_train` / `X_test` locals
+]
 
 [tool.black]
 line-length = 100

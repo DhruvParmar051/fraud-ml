@@ -1,0 +1,22 @@
+model:
+  n_estimators: 300
+  max_depth: 6
+  learning_rate: 0.05
+  subsample: 0.8
+  colsample_bytree: 0.8
+  random_state: 42
+  eval_metric: aucpr
+  # scale_pos_weight is computed from the training data at runtime, not hardcoded.
+
+paths:
+  processed_data: data/processed/features.parquet
+  mlflow_tracking_uri: http://localhost:5050 # 5050, not 5000 (macOS AirPlay)
+  experiment_name: fraud-detection
+  registered_model_name: fraud-detector
+
+split:
+  test_fraction: 0.20
+
+thresholds:
+  promotion_auc_pr: 0.70
+  recall_target: 0.90

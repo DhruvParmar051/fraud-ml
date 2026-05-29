@@ -1,27 +1,32 @@
 exclude: ^notebooks/
 
 repos:
-  # ── Ruff: fast linter + import sorter ────────────────────
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.6.9
+  # ── Code quality: run from the project env (language: system) so the hooks use
+  #    the SAME tool versions as `make lint` / CI. Pinned isolated hooks drifted
+  #    badly (ruff 0.6.9 vs env 0.15 still enforcing the removed ANN101; mypy with
+  #    no libraries) and flagged errors that didn't reproduce locally.
+  - repo: local
     hooks:
       - id: ruff
-        args: [--fix] # auto-fix what it safely can
-
-  # ── Black: the code formatter ────────────────────────────
-  - repo: https://github.com/psf/black
-    rev: 24.8.0
-    hooks:
+        name: ruff (project env)
+        entry: ruff check --fix
+        language: system
+        types: [python]
       - id: black
-
-  # ── mypy: static type checker ────────────────────────────
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.11.2
-    hooks:
+        name: black (project env)
+        entry: black
+        language: system
+        types: [python]
       - id: mypy
+        name: mypy (project env)
+        entry: mypy
+        language: system
+        types: [python]
         files: ^src/
+        pass_filenames: false
+        args: ["src/"]
 
-  # ── General safety hooks ─────────────────────────────────
+  # ── General safety hooks (no project deps needed) ────────
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
     hooks:
