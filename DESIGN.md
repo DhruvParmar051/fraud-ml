@@ -53,3 +53,22 @@ Expectations rules (Week 3) to guard against dirty production data.
 - Primary metric: AUC-PR. Secondary: precision at 90% recall.
 - Time-based train/test split (first 80% of `step` = train) — never random, since fraud
   patterns evolve over time and a random split leaks temporal information.
+
+## Class-imbalance strategy (Week 9)
+
+Compared three approaches on the held-out test set (one MLflow experiment, `imbalance-comparison`):
+
+| Strategy          | AUC-PR              | precision @ 90% recall                   |
+| ----------------- | ------------------- | ---------------------------------------- |
+| scale_pos_weight  | 0.998               | 0.996                                    |
+| SMOTE (ratio 0.1) | 0.9999              | 1.000                                    |
+| threshold tuning  | (ranking unchanged) | precision 0.996 @ recall 0.91, thr=0.999 |
+
+**Decision: keep `scale_pos_weight` + threshold tuning; skip SMOTE.**
+
+- SMOTE's ranking gain over `scale_pos_weight` is negligible (~0.002 AUC-PR) on PaySim's
+  already-separable data — not worth the added pipeline complexity and synthetic-data risk.
+- Threshold tuning is orthogonal to the model: it doesn't change AUC-PR, it selects the
+  operating point. Because the model is extremely confident, hitting the 90%-recall business
+  target requires a ~0.999 threshold, yielding ~99.6% precision. This is the lever that
+  actually governs the fraud-ops alert workload in production.
