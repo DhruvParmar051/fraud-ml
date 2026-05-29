@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fraud-serving-config
+data:
+  # In minikube, the host (where docker-compose infra runs) is reachable here:
+  MLFLOW_TRACKING_URI: "http://host.minikube.internal:5050"
+  MLFLOW_S3_ENDPOINT_URL: "http://host.minikube.internal:9000"
+  AWS_ACCESS_KEY_ID: "minioadmin"
+  AWS_SECRET_ACCESS_KEY: "minioadmin"
+  REDIS_CONNECTION_STRING: "host.minikube.internal:6379"

@@ -1,0 +1,13 @@
+.git/
+data/
+wandb/
+mlruns/
+mlflow.db
+reports/
+notebooks/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+**/__pycache__/
+.venv/
+src/features/feature_repo/data/*.parquet

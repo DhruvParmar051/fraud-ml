@@ -54,10 +54,16 @@ def load_predictor() -> None:
     mlflow.set_tracking_uri(TRACKING_URI)
     _model = mlflow.xgboost.load_model(f"models:/{MODEL_NAME}/{MODEL_STAGE}")
     _model_version = MlflowClient().get_latest_versions(MODEL_NAME, stages=[MODEL_STAGE])[0].version
-    background = load_features(Path(PROCESSED_DATA)).sample(N_BACKGROUND, random_state=42)[
-        FEATURE_COLUMNS
-    ]
-    _explainer = shap.TreeExplainer(_model, data=background, feature_perturbation="interventional")
+    bg_path = Path(PROCESSED_DATA)
+    if bg_path.exists():
+        background = load_features(bg_path).sample(N_BACKGROUND, random_state=42)[FEATURE_COLUMNS]
+        _explainer = shap.TreeExplainer(
+            _model, data=background, feature_perturbation="interventional"
+        )
+    else:
+        # No background data available (e.g. inside the serving container): fall back to
+        # the tree-path-dependent explainer — self-contained and faster.
+        _explainer = shap.TreeExplainer(_model)
     logger.info("Loaded model '%s' stage=%s version=%s", MODEL_NAME, MODEL_STAGE, _model_version)
 
 
