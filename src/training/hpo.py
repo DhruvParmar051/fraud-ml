@@ -12,6 +12,7 @@ tuned model if it clears the promotion gate.
 from __future__ import annotations
 
 import logging
+import os
 import sys
 from pathlib import Path
 from typing import Any
@@ -58,6 +59,20 @@ def suggest_params(trial: optuna.Trial) -> dict[str, Any]:
     }
 
 
+def log_trial_to_wandb(params: dict[str, Any], val_auc_pr: float) -> None:
+    """Log one HPO trial as a W&B run, for parallel-coordinates / sweep viz."""
+    import wandb
+
+    wandb.init(
+        project=os.getenv("WANDB_PROJECT", "fraud-detection"),
+        group="hpo",
+        config=params,
+        reinit="finish_previous",
+    )
+    wandb.log({"val_auc_pr": val_auc_pr})
+    wandb.finish()
+
+
 def main() -> int:
     """Run the HPO study and register the best model."""
     load_dotenv()
@@ -85,6 +100,10 @@ def main() -> int:
             metrics = compute_metrics(y_val_arr, model.predict_proba(X_val), recall_target)
             mlflow.log_params(params)
             mlflow.log_metric("val_auc_pr", metrics["auc_pr"])
+            try:
+                log_trial_to_wandb(params, metrics["auc_pr"])
+            except Exception as exc:
+                logger.warning("W&B trial logging skipped: %s", exc)
             return metrics["auc_pr"]
 
     with mlflow.start_run(run_name="hpo"):

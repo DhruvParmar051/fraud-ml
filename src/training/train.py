@@ -11,6 +11,7 @@ registers the model as 'fraud-detector'.
 from __future__ import annotations
 
 import logging
+import os
 import sys
 import tempfile
 from pathlib import Path
@@ -96,6 +97,20 @@ def compute_scale_pos_weight(y: pd.Series) -> float:
     return (len(y) - n_pos) / max(n_pos, 1)
 
 
+def log_to_wandb(
+    params: dict[str, Any],
+    metrics: dict[str, float],
+    image_paths: dict[str, Path],
+) -> None:
+    """Mirror params, metrics, and plots to Weights & Biases."""
+    import wandb
+
+    wandb.init(project=os.getenv("WANDB_PROJECT", "fraud-detection"), config=params)
+    wandb.log(metrics)
+    wandb.log({name: wandb.Image(str(path)) for name, path in image_paths.items()})
+    wandb.finish()
+
+
 def main() -> int:
     """Full training pipeline entry point."""
     load_dotenv()
@@ -140,6 +155,18 @@ def main() -> int:
             mlflow.log_artifact(str(shap_path))
             mlflow.log_artifact(str(cm_path))
             mlflow.log_artifact(str(fi_path))
+            try:
+                log_to_wandb(
+                    {**cfg["model"], "scale_pos_weight": scale_pos_weight},
+                    metrics,
+                    {
+                        "confusion_matrix": cm_path,
+                        "feature_importance": fi_path,
+                        "shap_summary": shap_path,
+                    },
+                )
+            except Exception as exc:
+                logger.warning("W&B logging skipped: %s", exc)
 
         min_auc_pr = float(cfg["thresholds"]["promotion_auc_pr"])
         if not passes_promotion_gate(metrics, min_auc_pr):
