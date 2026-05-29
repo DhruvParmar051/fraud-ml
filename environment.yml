@@ -18,6 +18,7 @@ dependencies:
       - shap>=0.44
       - optuna>=3.5
       - imbalanced-learn>=0.12
+      - python-dotenv>=1.0
       # MLOps
       - mlflow>=2.11
       - wandb>=0.16

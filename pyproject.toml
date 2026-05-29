@@ -22,6 +22,22 @@ python_version = "3.11"
 strict = true
 ignore_missing_imports = true
 
+[[tool.mypy.overrides]]
+# Great Expectations ships incomplete type info. Treat it as untyped so strict
+# mode doesn't choke on its un-exported Expectation classes and untyped methods.
+module = "great_expectations.*"
+follow_imports = "skip"
+follow_imports_for_stubs = true
+
+[tool.pyright]
+# Great Expectations ships incomplete type info. Don't flag its untyped surface —
+# this mirrors mypy's `ignore_missing_imports = true` for the same library.
+reportPrivateImportUsage = false
+reportUnknownMemberType = false
+reportUnknownVariableType = false
+reportUnknownArgumentType = false
+reportMissingTypeStubs = false
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-v --tb=short"
