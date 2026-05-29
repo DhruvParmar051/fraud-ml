@@ -43,3 +43,8 @@ dependencies:
       - mypy>=1.9
       - black>=24.3
       - pre-commit>=3.7
+      # Notebooks & EDA visualization
+      - jupyterlab>=4.0
+      - ipykernel>=6.29
+      - matplotlib>=3.8
+      - seaborn>=0.13
