@@ -11,7 +11,6 @@ import logging
 import os
 import time
 from datetime import UTC, datetime
-from pathlib import Path
 from typing import Any
 
 import mlflow
@@ -25,7 +24,7 @@ from mlflow import MlflowClient
 
 from src.features.online import get_online_features
 from src.serving.schemas import FeatureContribution, PredictionResponse, TransactionRequest
-from src.training.train import FEATURE_COLUMNS, load_features
+from src.training.train import FEATURE_COLUMNS
 
 load_dotenv()
 
@@ -38,9 +37,7 @@ logger = logging.getLogger(__name__)
 MODEL_NAME = "fraud-detector"
 MODEL_STAGE = "Production"
 TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI", "http://localhost:5050")
-PROCESSED_DATA = "data/processed/features.parquet"
 DECISION_THRESHOLD = 0.5
-N_BACKGROUND = 100
 TOP_K = 3
 
 _model: Any = None
@@ -54,16 +51,9 @@ def load_predictor() -> None:
     mlflow.set_tracking_uri(TRACKING_URI)
     _model = mlflow.xgboost.load_model(f"models:/{MODEL_NAME}/{MODEL_STAGE}")
     _model_version = MlflowClient().get_latest_versions(MODEL_NAME, stages=[MODEL_STAGE])[0].version
-    bg_path = Path(PROCESSED_DATA)
-    if bg_path.exists():
-        background = load_features(bg_path).sample(N_BACKGROUND, random_state=42)[FEATURE_COLUMNS]
-        _explainer = shap.TreeExplainer(
-            _model, data=background, feature_perturbation="interventional"
-        )
-    else:
-        # No background data available (e.g. inside the serving container): fall back to
-        # the tree-path-dependent explainer — self-contained and faster.
-        _explainer = shap.TreeExplainer(_model)
+    # tree_path_dependent explainer (no background) — ~50-100x cheaper than
+    # interventional and needs no background data, keeping serving latency low.
+    _explainer = shap.TreeExplainer(_model)
     logger.info("Loaded model '%s' stage=%s version=%s", MODEL_NAME, MODEL_STAGE, _model_version)
 
 

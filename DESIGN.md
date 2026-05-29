@@ -72,3 +72,19 @@ Compared three approaches on the held-out test set (one MLflow experiment, `imba
   operating point. Because the model is extremely confident, hitting the 90%-recall business
   target requires a ~0.999 threshold, yielding ~99.6% precision. This is the lever that
   actually governs the fraud-ops alert workload in production.
+
+## Serving performance (Week 18 — Locust, 50 concurrent users, 60s)
+
+| Metric | Value |
+| --- | --- |
+| Requests | 8,945 (0 failures) |
+| Throughput | ~149 req/s |
+| Latency P50 | 8 ms |
+| Latency P95 | 14 ms |
+| Latency P99 | **21 ms** |
+
+**Key tuning:** the per-prediction SHAP explainer was switched from *interventional*
+(100-row background) to *tree-path-dependent* (no background). This cut per-request SHAP
+cost ~50-100x and dropped P99 from ~1,800 ms to 21 ms (and throughput 41 -> 149 req/s) with
+no change to the decision — only a minor, still-valid shift in attribution method. Well
+under the 100 ms P99 target.
