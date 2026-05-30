@@ -42,3 +42,6 @@ src/features/feature_repo/data/
 .DS_Store
 .vscode/
 .idea/
+
+# Generated KFP pipeline YAML
+kubeflow/fraud_pipeline.yaml
