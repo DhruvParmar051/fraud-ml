@@ -1,0 +1,75 @@
+{
+  "title": "Fraud Detection",
+  "uid": "fraud",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "10s",
+  "time": { "from": "now-15m", "to": "now" },
+  "timezone": "browser",
+  "tags": ["fraud", "ml"],
+  "panels": [
+    {
+      "id": 1, "type": "stat", "title": "Requests / sec",
+      "gridPos": {"x": 0, "y": 0, "w": 6, "h": 4},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "reqps"}},
+      "targets": [{"refId": "A", "expr": "sum(rate(fraud_predictions_total[1m]))"}]
+    },
+    {
+      "id": 2, "type": "stat", "title": "Fraud detection rate",
+      "gridPos": {"x": 6, "y": 0, "w": 6, "h": 4},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "percentunit", "decimals": 4}},
+      "targets": [{"refId": "A",
+        "expr": "sum(rate(fraud_predictions_total{decision=\"FRAUD\"}[5m])) / sum(rate(fraud_predictions_total[5m]))"}]
+    },
+    {
+      "id": 3, "type": "stat", "title": "P50 latency",
+      "gridPos": {"x": 12, "y": 0, "w": 6, "h": 4},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "s"}},
+      "targets": [{"refId": "A",
+        "expr": "histogram_quantile(0.50, sum(rate(prediction_latency_seconds_bucket[5m])) by (le))"}]
+    },
+    {
+      "id": 4, "type": "stat", "title": "P99 latency",
+      "gridPos": {"x": 18, "y": 0, "w": 6, "h": 4},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "s",
+        "thresholds": {"mode": "absolute", "steps": [
+          {"color": "green", "value": null}, {"color": "red", "value": 0.1}
+        ]}}},
+      "targets": [{"refId": "A",
+        "expr": "histogram_quantile(0.99, sum(rate(prediction_latency_seconds_bucket[5m])) by (le))"}]
+    },
+    {
+      "id": 5, "type": "timeseries", "title": "Latency percentiles (P50/P95/P99)",
+      "gridPos": {"x": 0, "y": 4, "w": 18, "h": 8},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "s"}},
+      "targets": [
+        {"refId": "A", "legendFormat": "P50",
+         "expr": "histogram_quantile(0.50, sum(rate(prediction_latency_seconds_bucket[5m])) by (le))"},
+        {"refId": "B", "legendFormat": "P95",
+         "expr": "histogram_quantile(0.95, sum(rate(prediction_latency_seconds_bucket[5m])) by (le))"},
+        {"refId": "C", "legendFormat": "P99",
+         "expr": "histogram_quantile(0.99, sum(rate(prediction_latency_seconds_bucket[5m])) by (le))"}
+      ]
+    },
+    {
+      "id": 6, "type": "stat", "title": "Model version",
+      "gridPos": {"x": 18, "y": 4, "w": 6, "h": 4},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "options": {"reduceOptions": {"calcs": ["lastNotNull"], "fields": "/version/"},
+                  "textMode": "value_and_name"},
+      "targets": [{"refId": "A", "expr": "model_version_info"}]
+    },
+    {
+      "id": 7, "type": "timeseries", "title": "Predictions by decision",
+      "gridPos": {"x": 18, "y": 8, "w": 6, "h": 4},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "targets": [{"refId": "A", "legendFormat": "{{decision}}",
+        "expr": "sum by (decision) (rate(fraud_predictions_total[1m]))"}]
+    }
+  ]
+}
