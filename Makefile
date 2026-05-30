@@ -3,7 +3,7 @@ COMPOSE       := docker compose -f docker/docker-compose.yml
 RAW_DATA      := data/raw/paysim.csv
 PROCESSED_DIR := data/processed/
 
-.PHONY: setup train serve test lint format docker-up docker-down docker-logs load-test drift-report retrain-check
+.PHONY: setup train serve test lint format docker-up docker-down docker-logs load-test drift-report retrain-check integration
 
 # ── Environment ──────────────────────────────────────────
 setup:
@@ -55,3 +55,7 @@ drift-report:
 
 retrain-check:
 	python -m src.monitoring.retrain_trigger --report reports/drift_latest.json
+
+# ── End-to-end smoke (Week 22) ───────────────────────────
+integration:
+	bash scripts/integration_smoke.sh

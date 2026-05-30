@@ -88,3 +88,19 @@ Compared three approaches on the held-out test set (one MLflow experiment, `imba
 cost ~50-100x and dropped P99 from ~1,800 ms to 21 ms (and throughput 41 -> 149 req/s) with
 no change to the decision — only a minor, still-valid shift in attribution method. Well
 under the 100 ms P99 target.
+
+## End-to-end integration (Week 22)
+
+`scripts/integration_smoke.sh` (also `make integration`) brings up the full stack and
+exercises it for a short cycle:
+
+1. `docker compose up -d` (Redpanda, MinIO, Redis, MLflow, Prometheus, Grafana)
+2. `uvicorn src.serving.main:app` (serving API on :8000)
+3. Streaming consumer (real-time Redis counters)
+4. Producer: 1,000 PaySim transactions at 100 TPS into `transactions.raw`
+5. Locust: 10 users, 30s, light load on `/predict`
+6. Verify Prometheus has scraped `fraud_predictions_total > 0`
+7. Verify Redis has `dest:*` live counters from the consumer
+
+Exits 0 on success; logs land in `/tmp/fraud-integration/`. Used as a pre-record sanity
+check before a portfolio screencast.
