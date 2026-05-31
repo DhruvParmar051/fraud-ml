@@ -1,4 +1,4 @@
-"""FastAPI serving app (Week 15).
+"""FastAPI serving app.
 
 Run:
     uvicorn src.serving.main:app --host 0.0.0.0 --port 8000

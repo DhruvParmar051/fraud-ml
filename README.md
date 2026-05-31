@@ -21,6 +21,17 @@ engineering, not pay for it.
 > balance-consistency features — this is documented honestly in `DESIGN.md`. The portfolio
 > value is the leakage-safe pipeline and the engineering, not the score.
 
+## Screenshots
+
+| | |
+| :---: | :---: |
+| ![Locust P99](docs/screenshots/locust_p99.png) | ![Grafana dashboard](docs/screenshots/grafana_dashboard.png) |
+| Load test — 50 users, 60 s, **P99 21 ms** | Grafana — request rate + serving latency |
+| ![MLflow runs](docs/screenshots/mlflow_runs.png) | ![Model Registry](docs/screenshots/mlflow_registry.png) |
+| MLflow — HPO runs sorted by `val_auc_pr` | MLflow Registry — `fraud-detector` in Production |
+
+> Capture instructions and filenames live in [`docs/screenshots/README.md`](docs/screenshots/README.md).
+
 ## Architecture
 
 ```mermaid
@@ -98,7 +109,7 @@ flowchart LR
   ranking) and is the actual lever for production alert workload.
 
 Detailed write-ups (EDA findings, comparison tables, the imbalance study) are in
-[`DESIGN.md`](./DESIGN.md).
+[`DESIGN.md`](./DESIGN.md). Engineering notes and gotchas are in [`NOTES.md`](./NOTES.md).
 
 ## Quick start
 

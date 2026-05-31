@@ -1,4 +1,4 @@
-"""Locust load test for the /predict endpoint (Week 18).
+"""Locust load test for the /predict endpoint.
 
 Run (with the server up at localhost:8000):
     locust -f locust/locustfile.py --host http://localhost:8000 \

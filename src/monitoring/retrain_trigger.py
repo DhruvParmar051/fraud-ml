@@ -1,4 +1,4 @@
-"""Drift-triggered retraining (Week 20).
+"""Drift-triggered retraining.
 
 Usage:
     python -m src.monitoring.retrain_trigger --report reports/drift_latest.json

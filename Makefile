@@ -56,6 +56,6 @@ drift-report:
 retrain-check:
 	python -m src.monitoring.retrain_trigger --report reports/drift_latest.json
 
-# ── End-to-end smoke (Week 22) ───────────────────────────
+# ── End-to-end smoke ───────────────────────────
 integration:
 	bash scripts/integration_smoke.sh

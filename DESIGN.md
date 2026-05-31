@@ -5,7 +5,7 @@
 PaySim synthetic mobile-money transactions: 6,362,620 rows, 11 columns, one simulated
 month (`step` = hours since start, 0–743). Label: `isFraud`.
 
-## Exploratory Data Analysis (Week 2)
+## Exploratory Data Analysis
 
 **Q1 — Fraud rate.** 8,213 / 6,362,620 = **0.1291%** (~1 in 775). Extreme imbalance.
 Consequences: accuracy is meaningless; use **AUC-PR** as the primary metric (not AUC-ROC);
@@ -23,7 +23,7 @@ predictive. Caveat: the flat hourly fraud count is a simulation artifact.
 10,000,000 (PaySim transfer limit). `amount` and `amount_to_balance_ratio` are predictive.
 
 **Q5 — Nulls / duplicates.** None — data is clean. These invariants become Great
-Expectations rules (Week 3) to guard against dirty production data.
+Expectations rules to guard against dirty production data.
 
 **Q6 — Transaction-time vs. history-dependent features.**
 
@@ -54,7 +54,7 @@ Expectations rules (Week 3) to guard against dirty production data.
 - Time-based train/test split (first 80% of `step` = train) — never random, since fraud
   patterns evolve over time and a random split leaks temporal information.
 
-## Class-imbalance strategy (Week 9)
+## Class-imbalance strategy
 
 Compared three approaches on the held-out test set (one MLflow experiment, `imbalance-comparison`):
 
@@ -73,7 +73,7 @@ Compared three approaches on the held-out test set (one MLflow experiment, `imba
   target requires a ~0.999 threshold, yielding ~99.6% precision. This is the lever that
   actually governs the fraud-ops alert workload in production.
 
-## Serving performance (Week 18 — Locust, 50 concurrent users, 60s)
+## Serving performance (Locust, 50 concurrent users, 60s)
 
 | Metric | Value |
 | --- | --- |
@@ -89,7 +89,7 @@ cost ~50-100x and dropped P99 from ~1,800 ms to 21 ms (and throughput 41 -> 149 
 no change to the decision — only a minor, still-valid shift in attribution method. Well
 under the 100 ms P99 target.
 
-## End-to-end integration (Week 22)
+## End-to-end integration
 
 `scripts/integration_smoke.sh` (also `make integration`) brings up the full stack and
 exercises it for a short cycle:

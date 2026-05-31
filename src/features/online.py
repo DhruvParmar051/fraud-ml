@@ -1,4 +1,4 @@
-"""Real-time online feature retrieval from Feast/Redis (Week 12).
+"""Real-time online feature retrieval from Feast/Redis.
 
 Usage (after `feast materialize ...`):
     from src.features.online import get_online_features

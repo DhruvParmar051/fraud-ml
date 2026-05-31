@@ -1,4 +1,4 @@
-"""Inference logic for the fraud-serving API (Week 15).
+"""Inference logic for the fraud-serving API.
 
 Loads the Production model + SHAP explainer once at startup, then for each
 request fetches online features, assembles the model's 18 features, scores,

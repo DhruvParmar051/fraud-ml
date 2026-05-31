@@ -1,4 +1,4 @@
-"""Compare class-imbalance strategies for the fraud model (Week 9).
+"""Compare class-imbalance strategies for the fraud model.
 
 Usage:
     python -m src.training.imbalance

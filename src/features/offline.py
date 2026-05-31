@@ -1,4 +1,4 @@
-"""Point-in-time-correct training features via Feast (Week 11).
+"""Point-in-time-correct training features via Feast.
 
 Usage:
     python -m src.features.offline

@@ -38,7 +38,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Real PaySim schema. NOTE: last column is `isFlaggedFraud`, not `isFraudster`
-# as the project brief stated — confirmed during Week 2 EDA.
+# as the project brief stated — confirmed during EDA.
 EXPECTED_COLUMNS: list[str] = [
     "step",
     "type",

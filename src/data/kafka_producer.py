@@ -1,4 +1,4 @@
-"""Replay PaySim transactions to Redpanda (Week 13).
+"""Replay PaySim transactions to Redpanda.
 
 Usage:
     python -m src.data.kafka_producer --tps 100

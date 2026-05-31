@@ -41,7 +41,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 CONFIG_PATH = Path("configs/training.yaml")
-DECISION_THRESHOLD = 0.5  # baseline cutoff; tuned properly in Week 9
+DECISION_THRESHOLD = 0.5  # baseline cutoff; tuned via the imbalance study
 
 FEATURE_COLUMNS: list[str] = [
     "amount",

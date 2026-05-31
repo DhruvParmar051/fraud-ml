@@ -1,4 +1,4 @@
-"""Kubeflow training pipeline (Week 24).
+"""Kubeflow training pipeline.
 
 Compile:
     python -m kubeflow.pipeline       # writes kubeflow/fraud_pipeline.yaml

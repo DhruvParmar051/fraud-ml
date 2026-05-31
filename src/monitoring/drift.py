@@ -1,4 +1,4 @@
-"""Evidently drift report: reference vs current features (Week 19).
+"""Evidently drift report: reference vs current features.
 
 Usage:
     python -m src.monitoring.drift \

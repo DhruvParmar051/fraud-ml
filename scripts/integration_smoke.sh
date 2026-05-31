@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# End-to-end integration smoke (Week 22).
+# End-to-end integration smoke.
 #
 # Starts every moving piece, sends some traffic, verifies Prometheus sees
 # /predict counters, then tears down. Requires Docker Desktop running and the

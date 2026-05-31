@@ -67,7 +67,7 @@ def add_window_features(df: DataFrame) -> DataFrame:
     Windows are ordered by ``step`` and span only PAST hours (negative range to
     0), so a row never sees future transactions — point-in-time safe. Keyed on
     ``nameDest`` because destination (mule) accounts repeat, unlike one-shot
-    originators (Week 2 EDA finding).
+    originators (an EDA finding).
     """
     w_1h = Window.partitionBy("nameDest").orderBy("step").rangeBetween(-HOURS_1H, 0)
     w_24h = Window.partitionBy("nameDest").orderBy("step").rangeBetween(-HOURS_24H, 0)

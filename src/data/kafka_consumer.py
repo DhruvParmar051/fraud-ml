@@ -1,4 +1,4 @@
-"""Streaming consumer: maintain real-time destination counters in Redis (Week 14).
+"""Streaming consumer: maintain real-time destination counters in Redis.
 
 Usage:
     python -m src.data.kafka_consumer            # run continuously
