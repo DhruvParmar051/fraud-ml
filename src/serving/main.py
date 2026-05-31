@@ -30,11 +30,20 @@ app.mount("/metrics", make_asgi_app())
 
 @app.get("/health")
 def health() -> dict[str, str]:
+    """Liveness probe. Returns ``status`` and the loaded ``model_stage``."""
     return {"status": "healthy", "model_stage": predict.MODEL_STAGE}
 
 
 @app.post("/predict", response_model=PredictionResponse)
 def predict_endpoint(req: TransactionRequest) -> PredictionResponse:
+    """Score a single transaction and record Prometheus metrics.
+
+    Args:
+        req: Incoming transaction payload (see ``TransactionRequest``).
+
+    Returns:
+        Fraud probability, decision label, top SHAP contributions, and latency.
+    """
     resp = predict.predict(req)
     metrics.FRAUD_PREDICTIONS.labels(decision=resp.decision).inc()
     metrics.PREDICTION_LATENCY.observe(resp.latency_ms / 1000.0)

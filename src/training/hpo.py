@@ -93,6 +93,7 @@ def main() -> int:
     mlflow.set_experiment(str(cfg["paths"]["experiment_name"]))
 
     def objective(trial: optuna.Trial) -> float:
+        """Optuna trial: train one model and return validation AUC-PR to maximize."""
         params = suggest_params(trial)
         with mlflow.start_run(nested=True):
             model = FraudModel(params=params, scale_pos_weight=spw)

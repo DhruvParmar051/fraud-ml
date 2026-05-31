@@ -1,3 +1,9 @@
+"""Feast feature definitions: entity (``nameDest``) and the destination-stats view.
+
+This module is consumed by ``feast apply`` to register entities and feature views
+against the offline Parquet source and the Redis online store.
+"""
+
 from datetime import timedelta
 
 from feast import Entity, FeatureView, Field, FileSource, ValueType
