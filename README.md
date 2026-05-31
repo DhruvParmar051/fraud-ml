@@ -1,5 +1,10 @@
 # Real-Time Transaction Fraud Detection
 
+[![CI](https://github.com/DhruvParmar051/fraud-ml/actions/workflows/ci.yml/badge.svg)](https://github.com/DhruvParmar051/fraud-ml/actions/workflows/ci.yml)
+[![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/release/python-3110/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 End-to-end ML system that scores financial transactions for fraud probability in real time
 (P99 < 25 ms), with **leakage-safe training**, **per-prediction SHAP explanations**,
 **drift-triggered retraining**, and a production-shaped streaming + serving path. Built
